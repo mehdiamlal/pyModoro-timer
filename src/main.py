@@ -13,28 +13,35 @@ seconds = 5
 timer_on = False
 pause_on = False
 break_on = False
+pomodoro_counter = ""  #string that will contain the representation of the pomodoros completed
 
-def set_colors(work):
+def set_mode_ui(work):
+    """Adjusts the UI based on the mode (work = True means work mode, work = False means break mode) """
     if work:
         window.config(background=WORK_COLOR_1)
         timer.config(background=WORK_COLOR_1)
         timer.config(foreground=WORK_COLOR_2)
         mode_description.config(background=WORK_COLOR_1)
         mode_description.config(foreground=WORK_COLOR_2)
+        pomodoros_label.config(background=WORK_COLOR_1)
         pause_btn["bg"] = WORK_COLOR_2
         pause_btn["fg"] = "#fff"
         reset_btn["bg"] = WORK_COLOR_2
         pause_btn["fg"] = "#fff"
+        mode_description.config(text="Time to work!")
     else:
         window.config(background=BREAK_COLOR_1)
         timer.config(background=BREAK_COLOR_1)
         timer.config(foreground="#fff")
         mode_description.config(background=BREAK_COLOR_1)
         mode_description.config(foreground="#fff")
+        pomodoros_label.config(background=BREAK_COLOR_1)
         pause_btn["bg"] = BREAK_COLOR_2
         pause_btn["fg"] = "#fff"
         reset_btn["bg"] = BREAK_COLOR_2
         pause_btn["fg"] = "#fff"
+        mode_description.config(text="Well done, enjoy your break!")
+
 
 def countdown_mechanism(m, s):
     """Fucntion that implements the countdown."""
@@ -64,21 +71,19 @@ def countdown():
     global timer_on
     timer_on = True
     start_btn["state"] = DISABLED
-    if break_on:
-        mode_description.config(text="Well done, enjoy your break!")
-    else:
-        mode_description.config(text="Time to work!")
-
     countdown_mechanism(minutes, seconds)
         
 def take_break():
     global break_on
     global minutes
     global seconds
+    global pomodoro_counter
     break_on = True
+    pomodoro_counter += "🍅"
+    pomodoros_label.config(text=pomodoro_counter)
     minutes = 0
     seconds = 4
-    set_colors(work=False)
+    set_mode_ui(work=False)
     countdown()
     
 def back_to_work():
@@ -86,9 +91,9 @@ def back_to_work():
     global minutes
     global seconds
     break_on = False
-    minutes = 25
-    seconds = 0
-    set_colors(work=True)
+    minutes = 0
+    seconds = 5
+    set_mode_ui(work=True)
     countdown()
 
 def reset():
@@ -98,14 +103,19 @@ def reset():
     global break_on
     global minutes
     global seconds
+    global pomodoro_counter
     timer_on = False
     pause_on = False
     break_on = False
     minutes = 25
     seconds = 0
+    pomodoro_counter = ""
+    pomodoros_label.config(text="")
     start_btn["state"] = NORMAL
     pause_btn.config(text="PAUSE")
     timer.config(text=f"{minutes}:0{seconds}")
+    set_mode_ui(work=True)
+    mode_description.config(text="")
 
 def pause():
     """Pauses timer's countdown."""
@@ -125,7 +135,12 @@ def pause():
 window = Tk()
 window.title("pyModoro Timer")
 window.minsize(width=800, height=800)
-window.config(background=WORK_COLOR_1, padx=100, pady=150)
+window.config(background=WORK_COLOR_1, padx=100)
+
+
+#pomodoros visualization
+pomodoros_label = Label(text=pomodoro_counter, font=(FONT_STYLE, 20, "normal"), bg=WORK_COLOR_1)
+pomodoros_label.pack()
 
 #mode description
 mode_description = Label(text="", font=(FONT_STYLE, 40, "normal"), bg=WORK_COLOR_1, fg=WORK_COLOR_2, pady=10)
