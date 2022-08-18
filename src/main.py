@@ -1,7 +1,7 @@
 from signal import pause
 from tkinter import *
-from turtle import back
 from tkmacosx import Button
+from playsound import playsound
 
 WORK_COLOR_1 = "#FFF2F2"
 WORK_COLOR_2 = "#F47C7C"
@@ -86,6 +86,7 @@ def take_break():
     set_mode_ui(work=False)
     window.attributes('-topmost',True)  #makes the window jump on top of the others, to remind the user to take a break
     window.attributes('-topmost',False)  #without this line, the window will remain stuck on top of the others
+    playsound("../sound/break.mp3", block=False)
     countdown()
     
 def back_to_work():
@@ -96,10 +97,17 @@ def back_to_work():
     minutes = 0
     seconds = 5
     set_mode_ui(work=True)
+    playsound("../sound/back_to_work.mp3", block=False)
+    countdown()
+
+def start():
+    """Starts the pomodoro session."""
+    playsound("../sound/start.mp3", block=False)
+    set_mode_ui(work=True)
     countdown()
 
 def reset():
-    """Resets the timer to its initial value"""
+    """Restarts the pomodoro session."""
     global timer_on
     global pause_on
     global break_on
@@ -127,11 +135,13 @@ def pause():
         pause_on = False
         timer_on = True
         pause_btn.config(text="PUASE")
+        playsound("../sound/resume.mp3", block=False)
         countdown_mechanism(minutes, seconds)
 
     else:
         pause_on = True
         timer_on = False
+        playsound("../sound/pause.mp3", block=False)
         pause_btn.config(text="RESUME")
 
 window = Tk()
@@ -153,7 +163,7 @@ timer = Label(text=f"{minutes}:0{seconds}", font=(FONT_STYLE, 60, "normal"), bg=
 timer.pack()
 
 #start button
-start_btn = Button(text="START", command=countdown, bg=WORK_COLOR_2, fg=WORK_COLOR_1, font=(FONT_STYLE, 35, "bold"), borderless=1)
+start_btn = Button(text="START", command=start, bg=WORK_COLOR_2, fg=WORK_COLOR_1, font=(FONT_STYLE, 35, "bold"), borderless=1)
 start_btn.pack()
 
 #pause button
