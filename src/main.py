@@ -1,3 +1,4 @@
+from curses import start_color
 from signal import pause
 from tkinter import *
 from tkmacosx import Button
@@ -40,7 +41,10 @@ def set_mode_ui(work):
         pause_btn["fg"] = "#fff"
         reset_btn["bg"] = BREAK_COLOR_2
         pause_btn["fg"] = "#fff"
-        mode_description.config(text="Well done, enjoy your break!")
+        if seconds == 6:
+            mode_description.config(text="Great job, enjoy your long break!")
+        else:
+            mode_description.config(text="Well done, enjoy your break!")
 
 
 def countdown_mechanism(m, s):
@@ -81,28 +85,40 @@ def take_break():
     break_on = True
     pomodoro_counter += "🍅"
     pomodoros_label.config(text=pomodoro_counter)
-    minutes = 5
-    seconds = 0
+
+    #checking to see if break should be long (20min) or short (5min)
+    if len(pomodoro_counter) == 4:
+        minutes = 20
+        seconds = 0
+        playsound("../sound/long_break.mp3", block=False)
+    else:
+        minutes = 5
+        seconds = 0
+        playsound("../sound/break.mp3", block=False)
+
     set_mode_ui(work=False)
     window.attributes('-topmost',True)  #makes the window jump on top of the others, to remind the user to take a break
     window.attributes('-topmost',False)  #without this line, the window will remain stuck on top of the others
-    playsound("../sound/break.mp3", block=False)
     countdown()
     
 def back_to_work():
-    global break_on
-    global minutes
-    global seconds
-    break_on = False
-    minutes = 5
-    seconds = 0
-    set_mode_ui(work=True)
-    playsound("../sound/back_to_work.mp3", block=False)
-    countdown()
+    if len(pomodoro_counter) == 4:
+        reset()
+    else:
+        global break_on
+        global minutes
+        global seconds
+        break_on = False
+        minutes = 25
+        seconds = 0
+        set_mode_ui(work=True)
+        playsound("../sound/back_to_work.mp3", block=False)
+        countdown()
 
 def start():
     """Starts the pomodoro session."""
     playsound("../sound/start.mp3", block=False)
+    pause_btn["state"] = NORMAL
     set_mode_ui(work=True)
     countdown()
 
@@ -122,6 +138,7 @@ def reset():
     pomodoro_counter = ""
     pomodoros_label.config(text="")
     start_btn["state"] = NORMAL
+    pause_btn["state"] = DISABLED
     pause_btn.config(text="PAUSE")
     timer.config(text=f"{minutes}:0{seconds}")
     set_mode_ui(work=True)
@@ -168,6 +185,7 @@ start_btn.pack()
 
 #pause button
 pause_btn = Button(text="PAUSE", command=pause,bg=WORK_COLOR_2, fg=WORK_COLOR_1, font=(FONT_STYLE, 35, "bold"), borderless=1)
+pause_btn["state"] = DISABLED
 pause_btn.pack()
 
 #reset button
