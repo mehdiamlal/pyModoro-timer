@@ -15,3 +15,9 @@ On top there will be a pomodoro counter, showing the user how many pomodoros wer
 - **Tkinter**: to implement the GUI
 - **Tkmacosx**: to style the buttons so that they can look better on Mac OS
 - **playsound**: to play transition sounds
+
+## Screenshots
+
+![Screenshot #1](https://user-images.githubusercontent.com/76702446/185499371-c06a7d21-b775-47eb-a362-b070f98ebab4.png)
+![Screenshot #2](https://user-images.githubusercontent.com/76702446/185499396-7630ce70-278f-4490-8474-91bc9855586d.png)
+![Screenshot #3](https://user-images.githubusercontent.com/76702446/185499410-d442e1e8-3246-4c07-bc81-e9bad984c3da.png)
