@@ -84,6 +84,8 @@ def take_break():
     minutes = 0
     seconds = 4
     set_mode_ui(work=False)
+    window.attributes('-topmost',True)  #makes the window jump on top of the others, to remind the user to take a break
+    window.attributes('-topmost',False)  #without this line, the window will remain stuck on top of the others
     countdown()
     
 def back_to_work():
