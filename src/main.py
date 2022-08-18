@@ -8,8 +8,8 @@ WORK_COLOR_2 = "#F47C7C"
 BREAK_COLOR_1 = "#A7C5EB"
 BREAK_COLOR_2 = "#4A47A3"
 FONT_STYLE = "Roboto Mono"
-minutes = 0
-seconds = 5
+minutes = 25
+seconds = 0
 timer_on = False
 pause_on = False
 break_on = False
@@ -81,8 +81,8 @@ def take_break():
     break_on = True
     pomodoro_counter += "🍅"
     pomodoros_label.config(text=pomodoro_counter)
-    minutes = 0
-    seconds = 4
+    minutes = 5
+    seconds = 0
     set_mode_ui(work=False)
     window.attributes('-topmost',True)  #makes the window jump on top of the others, to remind the user to take a break
     window.attributes('-topmost',False)  #without this line, the window will remain stuck on top of the others
@@ -94,8 +94,8 @@ def back_to_work():
     global minutes
     global seconds
     break_on = False
-    minutes = 0
-    seconds = 5
+    minutes = 5
+    seconds = 0
     set_mode_ui(work=True)
     playsound("../sound/back_to_work.mp3", block=False)
     countdown()
