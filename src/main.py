@@ -1,5 +1,3 @@
-from curses import start_color
-from signal import pause
 from tkinter import *
 from tkmacosx import Button
 from playsound import playsound
